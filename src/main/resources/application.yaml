@@ -1,0 +1,21 @@
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          generic:
+            client-id: gamedoora-client
+            client-secret: client-secret
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            #scope: openid,profile,email
+        provider:
+          generic:
+            authorization-uri: http://localhost:8080/auth/realms/gamedoora/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/auth/realms/gamedoora/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/auth/realms/gamedoora/protocol/openid-connect/userinfo
+            user-name-attribute: sub
+            jwk-set-uri: http://localhost:8080/auth/realms/gamedoora/protocol/openid-connect/certs
+server:
+  port: 8181
