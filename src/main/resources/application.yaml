@@ -3,18 +3,8 @@ server:
 
 spring:
   application:
-    name: gd-cloud-gateway
-  security:
-    oauth2:
-      client:
-        registration:
-          gateway:
-            provider:
-            client-id:
-            client-secret:
-            scope:
-            authorization-grant-type:
-            redirect-uri:
-        provider:
-          lkc:
-            issuer-uri:
+    name: cloudgateway
+  config:
+    import: optional:configserver:${CONFIG_SERVER}
+  profiles:
+    active: ${PROFILE}
