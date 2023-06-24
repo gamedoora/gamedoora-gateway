@@ -31,3 +31,4 @@ build/
 nbactions.xml
 ### VS Code ###
 .vscode/
+src/main/resources/application-local.yaml
