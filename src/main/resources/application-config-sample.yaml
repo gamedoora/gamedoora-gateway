@@ -1,3 +1,4 @@
+# routes need to come up form properties file, cause it can change, we might have to reconfig everytime
 server:
   port: 8181
 
