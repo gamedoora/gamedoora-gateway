@@ -32,7 +32,7 @@ public class SecurityConfig{
                 .anyExchange().authenticated();
     }
 
-
-
+// receive token, search Idp and check for the path it sents
+// remove
 }
 
