@@ -2,6 +2,7 @@ package com.gamedoora.gateway.config;
 
 import com.gamedoora.gateway.util.AuthenticationFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.route.RouteLocator;
 import org.springframework.cloud.gateway.route.builder.RouteLocatorBuilder;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +10,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class GatewayConfig {
+    @Value("${proxyHost}")
+    private String proxyHost;
 
     private AuthenticationFilter authenticationFilter;
 
@@ -25,9 +28,9 @@ public class GatewayConfig {
     public RouteLocator routes(RouteLocatorBuilder builder) {
         return builder.routes() // we don't need form data, if the path that being asked is part of gated path, then look at header, it true
                 .route("proxy-service", r -> r
-                        .path("/path/to/proxy")
+                        .path("/aggregate/**")
                         .filters(f -> f.filter(authenticationFilter))
-                        .uri("/path/to/aggregator"))
+                        .uri(proxyHost))
                 .build();
     }
 
