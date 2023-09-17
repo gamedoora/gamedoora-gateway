@@ -1,0 +1,11 @@
+[Unit]
+Description=gamedoora-gateway
+After=syslog.target gamedoora-config-server.service
+
+[Service]
+User=gamedoora
+ExecStart=/opt/gamedoora/gamedoora-gateway.jar
+SuccessExitStatus=143
+Environment="CONFIG_SERVER=http://localhost:8888"
+[Install]
+WantedBy=multi-user.target
