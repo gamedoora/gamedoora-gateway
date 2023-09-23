@@ -1,6 +1,7 @@
 package com.gamedoora.gateway.util;
 
 import io.jsonwebtoken.Claims;
+import org.apache.commons.lang3.SystemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -40,9 +41,11 @@ public class AuthenticationFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
 
-        if (routeValidator.isSecured.test(request)) {
-            if (isAuthMissing(request))
-                return onError(exchange, "Authorization header is missing in request", HttpStatus.UNAUTHORIZED);
+    if (SystemUtils.getEnvironmentVariable("LOCAL_DEPLOY", "false").equalsIgnoreCase("false")
+        && routeValidator.isSecured.test(request)) {
+      if (isAuthMissing(request))
+        return onError(
+            exchange, "Authorization header is missing in request", HttpStatus.UNAUTHORIZED);
 
             final String token = getAuthHeader(request);
 
