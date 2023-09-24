@@ -7,11 +7,13 @@ import org.springframework.stereotype.Component;
 import java.security.Key;
 import java.util.Date;
 
-import jakarta.annotation.PostConstruct;
+//import jakarta.annotation.PostConstruct; // this was in spring-boot version >=3
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+
+import javax.annotation.PostConstruct;
 
 @Component
 @RefreshScope
