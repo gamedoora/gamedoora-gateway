@@ -1,6 +1,7 @@
 package com.gamedoora.gateway.config;
 
 import com.gamedoora.gateway.util.AuthenticationFilter;
+import com.gamedoora.gateway.util.CorsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
@@ -16,7 +17,7 @@ public class GatewayConfig {
     private String proxyHost;
 
     private AuthenticationFilter authenticationFilter;
-
+    private CorsFilter corsFilter;
     public AuthenticationFilter getAuthenticationFilter() {
         return authenticationFilter;
     }
@@ -31,9 +32,21 @@ public class GatewayConfig {
         return builder.routes() // we don't need form data, if the path that being asked is part of gated path, then look at header, it true
                 .route("proxy-service", r -> r
                         .path("/aggregate/**")
-                        .filters(f -> f.filter(authenticationFilter))
+                        .filters(f ->
+                                f.filter(authenticationFilter)
+                                        .filter(getCorsFilter())
+                        )
+
                         .uri(proxyHost))
                 .build();
+    }
+
+    public CorsFilter getCorsFilter() {
+        return corsFilter;
+    }
+    @Autowired
+    public void setCorsFilter(CorsFilter corsFilter) {
+        this.corsFilter = corsFilter;
     }
 
 
