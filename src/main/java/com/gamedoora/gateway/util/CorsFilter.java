@@ -24,22 +24,15 @@ public class CorsFilter implements GatewayFilter {
         ServerHttpRequest request = exchange.getRequest();
         exchange.getResponse().getHeaders().
                 set("Access-Control-Allow-Origin", "*");
-
+        exchange.getResponse().getHeaders().
+                set("Access-Control-Allow-Credentials", "true");
+        exchange.getResponse().getHeaders().
+                set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE, PUT");
+        exchange.getResponse().getHeaders().
+                set("Access-Control-Max-Age", "3600");
+        exchange.getResponse().getHeaders().
+                set("Access-Control-Allow-Headers", "Content-Type, Accept, X-Requested-With, remember-me, Authorization");
         return chain.filter(exchange);
-    }
-
-    private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
-        ServerHttpResponse response = exchange.getResponse();
-        response.setStatusCode(httpStatus);
-        return response.setComplete();
-    }
-
-    private String getAuthHeader(ServerHttpRequest request) {
-        return request.getHeaders().getOrEmpty("Authorization").get(0);
-    }
-
-    private boolean isAuthMissing(ServerHttpRequest request) {
-        return !request.getHeaders().containsKey("Authorization");
     }
 
 }
