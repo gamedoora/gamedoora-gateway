@@ -1,39 +1,34 @@
 # Gamedoora API Gateway
 
-Welcome to the API Gateway for Gamedoora services. Backed by an OAuth2 authorization server, this application authenticates all incoming requests before they access the resources from the backend servers.
+Welcome to the API Gateway for Gamedoora services. This application serves as the central hub for routing requests from the frontend to respective microservices. Equipped with filters, the gateway performs various checks and redirects requests to the appropriate services.
 
-This application is primarily designed to:
+## Microservice Configuration
 
-1. Function as an API gateway, offering a uniform interface to the underlying resource servers.
-2. Decouple the authentication and authorization concerns from the resource servers, promoting a more modular architecture
+Our microservices utilize a configuration server to manage individual properties and define common properties shared among all microservices. For detailed information on how this works, please refer to [Spring Cloud Configuration](https://www.baeldung.com/spring-cloud-configuration).
 
-## Setup Instructions
+To set up a microservice locally:
 
-### Prerequisites
+1. Clone the microservice repository. You can use this [demo resource server](https://github.com/arkaprovob/spring-boot-resource-server) or any other service from the Gamedoora [repositories](https://github.com/orgs/gamedoora/repositories).
+2. Clone the [config server](https://github.com/gamedoora/gamedoora-config-server).
+3. Create a local `application-local.yaml` file and add microservice-specific properties.
+4. Run the microservice, pointing it to the config server for configuration.
 
-1. Clone the repository.
-2. Have an instance of Keycloak or any OAuth2-supported identity and access management application configured up and running.
-3. (Optional) Clone the [config server](https://github.com/gamedoora/gamedoora-config-server).
-4. Clone, set up, and run a resource server for testing purposes. You can use this [demo resource server](https://github.com/arkaprovob/spring-boot-resource-server) or any other service from the Gamedoora [repositories](https://github.com/orgs/gamedoora/repositories).
+## Gateway Configuration
 
-This application can fetch configurations in two ways:
+Our gateway application is designed to run with Keycloak for Single Sign-On (SSO). To run the gateway locally, follow these steps:
 
-1. From a local properties file.
-2. From a Configuration server.
+1. Clone the gateway application locally.
+2. Clone the [config server](https://github.com/gamedoora/gamedoora-config-server).
+3. Set up a local database and add the details to the local `.properties` file.
+4. Create a realm on Keycloak, make a client, and note down the necessary details (URL, username, client, etc.).
+5. Generate a token for your Keycloak client. Refer to [Spring Boot Keycloak Integration](https://www.baeldung.com/spring-boot-keycloak) for more information.
+6. Create a local `.properties` file and add Keycloak configurations.
 
-### Configuring with the Local Properties File
+## Testing the Application
 
-1. Create a `application-local.yaml` file under the resource folder.
-2. Refer to [application-config-sample.yaml](src%2Fmain%2Fresources%2Fapplication-config-sample.yaml) and adjust the values of your newly created properties file accordingly.
-3. Set the active profile as `local` and start the application.
+To test the application locally:
 
-### Configuring with the Spring Boot Configuration Server
+1. Send a cURL request to the microservice application.
+2. Include necessary details in the request header, such as username, password, and token.
 
-1. Clone, configure, and start the [config server](https://github.com/gamedoora/gamedoora-config-server) for the API gateway application.
-2. Set the following two environment variables and start the server:
-    1. `CONFIG_SERVER` - Set this to the URL of your config server (append a `/` at the end).
-    2. `PROFILE` - This should match the profile you're using and which is available in the config server, registered for your application.
-
-After these steps, start the API gateway. Test the configuration by attempting to access a newly configured route. For example, if you used the [Demo resource server](https://github.com/arkaprovob/spring-boot-resource-server) and kept the route information as given in [application-config-sample.yaml](src%2Fmain%2Fresources%2Fapplication-config-sample.yaml), try accessing this URL: `http://localhost:8181/doora/r1/resource`.
-
-If the configurations are correct, you will be redirected to the OAuth server's login page. Post authentication, you should be able to see the content from the pre-configured demo resource server.
+If the configurations are correct, you should receive an appropriate response; otherwise, an error will occur.
