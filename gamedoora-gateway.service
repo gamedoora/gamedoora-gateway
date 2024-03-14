@@ -6,6 +6,6 @@ After=syslog.target gamedoora-config-server.service
 User=gamedoora
 ExecStart=/opt/gamedoora/gamedoora-gateway.jar
 SuccessExitStatus=143
-Environment="CONFIG_SERVER=http://localhost:8888"
+Environment="CONFIG_SERVER=http://localhost:8888 LOG_PATH=/var/log/gamedoora"
 [Install]
 WantedBy=multi-user.target
